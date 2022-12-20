@@ -43,5 +43,16 @@ namespace User.API.Controllers
             
             return StatusCode(500, resultVm.ToJson());
         }
+
+        protected IActionResult ResultNotAuthorized(string message)
+        {
+            var resultVm = new ResultViewModel
+            {
+                Message = message,
+                Success = false
+            };
+
+            return StatusCode(401, resultVm.ToJson());
+        }
     }
 }

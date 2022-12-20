@@ -18,7 +18,7 @@ namespace User.API.ViewModels
 
         }
 
-        public ResultViewModel(string message, bool success, string data)
+        public ResultViewModel(string message, bool success, dynamic data)
         {
             Message = message;
             Success = success;

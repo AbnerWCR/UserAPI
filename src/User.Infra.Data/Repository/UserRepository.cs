@@ -27,5 +27,14 @@ namespace User.Infra.Data.Repository
 
             return user.FirstOrDefault();
         }
+
+        public async Task<Entity.User> UpdatePasswordAsync(Entity.User obj)
+        {
+            _userContext.Attach(obj);
+            _userContext.Entry(obj).Property(p => p.Password).IsModified = true;
+            await _userContext.SaveChangesAsync();
+
+            return obj;
+        }
     }
 }

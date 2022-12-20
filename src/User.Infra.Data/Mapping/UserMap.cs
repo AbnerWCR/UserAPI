@@ -28,7 +28,7 @@ namespace User.Infra.Data.Mapping
                 .HasConversion(p => p.ToString(), prop => prop)
                 .IsRequired()
                 .HasColumnName("PASSWORD")
-                .HasColumnType("varchar(18)");
+                .HasColumnType("varchar(200)");
         }
     }
 }

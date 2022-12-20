@@ -6,19 +6,24 @@ namespace User.Infra.Data.Context
 {
     public class UserContext : DbContext 
     {
+        public UserContext()
+        {
+
+        }
+
         public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<Entity.User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            //base.OnModelCreating(builder);
 
-            builder.Entity<Entity.User>(new UserMap().Configure);
+            builder.ApplyConfiguration(new UserMap());
+            //builder.Entity<Entity.User>(new UserMap().Configure);
         }
     }
 }

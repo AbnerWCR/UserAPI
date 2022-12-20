@@ -30,10 +30,11 @@ namespace User.API.Controllers
                 {
                     var user = _mapper.Map<UserDTO>(createUserVm);
 
-                    var result = await _userService.Create(user);
-                    var uri = new Uri($"api/[controller]/{result.Id}", UriKind.RelativeOrAbsolute);
+                    var userCreated = await _userService.Create(user);
 
-                    return ResultCreated(uri, "User created", result);
+                    var uri = new Uri($"api/user/{userCreated.Id}", UriKind.RelativeOrAbsolute);
+
+                    return ResultCreated(uri, "User created", userCreated);
                 }
 
                 return ResultNotFound("User not found");
@@ -105,6 +106,21 @@ namespace User.API.Controllers
             try
             {
                 var result = await _userService.GetById(id);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return ResultInternalError(ex.Message);
+            }
+        }
+
+        [HttpGet("{email}/by-email")]
+        public async Task<IActionResult> Get(string email)
+        {
+            try
+            {
+                var result = await _userService.GetByEmail(email);
 
                 return Ok(result);
             }

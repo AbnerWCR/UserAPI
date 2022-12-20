@@ -20,7 +20,7 @@ namespace User.Infra.Data.Repository
 
         public virtual async Task<TEntity> CreateAsync(TEntity obj)
         {
-            await _userContext.Set<TEntity>().AddAsync(obj);
+            _userContext.Add(obj);
             await _userContext.SaveChangesAsync();
 
             return obj;

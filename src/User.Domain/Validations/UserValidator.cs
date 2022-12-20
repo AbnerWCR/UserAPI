@@ -10,20 +10,20 @@ namespace User.Domain.Validations
             // general validation
             RuleFor(x => x)
                 .NotEmpty()
-                .WithMessage("The entity is not empty.")
+                .WithMessage("The entity can't be empty.")
 
                 .NotNull()
-                .WithMessage("The entity is not null.");
+                .WithMessage("The entity can't be null.");
 
             // for the property name of the entity
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("The name is not empty.")
+                .WithMessage("The name can't be empty.")
 
                 .NotNull()
-                .WithMessage("The name is not null.")
+                .WithMessage("The name can't be null.")
 
-                .MaximumLength(3)
+                .MinimumLength(3)
                 .WithMessage("Minimum characters is 3.")
 
                 .MaximumLength(50)
@@ -33,10 +33,10 @@ namespace User.Domain.Validations
             //Validação Email
             RuleFor(x => x.Email)
             .NotNull()
-                .WithMessage("The email is not null.")
+                .WithMessage("The email can't be null.")
 
                 .NotEmpty()
-                .WithMessage("The email is not empty.")
+                .WithMessage("The email can't be empty.")
 
                 .MinimumLength(10)
                 .WithMessage("Minimum characters is 10.")
@@ -51,28 +51,16 @@ namespace User.Domain.Validations
             // for the property password of the entity
             RuleFor(x => x.Password)
                 .NotEmpty()
-                .WithMessage("The password is not empty.")
+                .WithMessage("The password can't be empty.")
 
                 .NotNull()
-                .WithMessage("The password is not null.")
+                .WithMessage("The password can't be null.")
 
-                .MaximumLength(6)
+                .MinimumLength(6)
                 .WithMessage("Minimum characters is 6.")
 
-                .MaximumLength(18)
-                .WithMessage("Maximum characters is 18.")
-
-                .Matches(@"[A-Z]+")
-                .WithMessage("Your password must contain at least one uppercase letter.")
-
-                .Matches(@"[a-z]+")
-                .WithMessage("Your password must contain at least one lowercase letter.")
-                
-                .Matches(@"[0-9]+")
-                .WithMessage("Your password must contain at least one number.")
-
-                .Matches(@"(?=.*?[#?!@$%^&*-])")
-                .WithMessage("Your password must contain at least one special character.");
+                .MaximumLength(200)
+                .WithMessage("Maximum characters is 18.");
         }
     }
 }

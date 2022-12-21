@@ -1,5 +1,4 @@
 # UserAPI
-API REST para CRUD e autenticação de usuários
 
 <h1 align="center">API Rest de gerenciamento e autenticação de usuários</h1>
 
@@ -19,7 +18,7 @@ API REST para CRUD e autenticação de usuários
 </h4>
 
 <h3 id="objetivo">✅ Objetivo:</h3>
-<p>A API foi desenvolvida com o objetivo de aplicar padrões de projetos, arquitetura em camadas e boas práticas, as tecnologias foram empregadas visando escalabilidade e performace, foi desenvolvido apenas uma entidade para que o entendimento fosse mais limpo e focado nas tecnologias e padrões, podendo ser replicado em sistemas maiores posteriormente.<p>
+<p>A API foi criada para aplicação de conceitos de clean code, DDD e arquitetura em camadas. Foi realizado o desenvolvimento de apenas uma entidade, visando o foco nas boas práticas e técnologias envolvidas, podendo ser replicado em sistemas maiores posteriormente.</p>
 <br/>
 <h3 id="tecnologias">✅ Tecnologias e padrões:</h3>
 <p>- .NET Core 3.2 </p>

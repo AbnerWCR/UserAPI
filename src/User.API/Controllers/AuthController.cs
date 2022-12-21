@@ -7,6 +7,7 @@ using User.Domain.Interfaces.API;
 using User.Domain.Interfaces.Services;
 using User.Infra.CrossCutting.Exceptions;
 using User.Infra.CrossCutting.Helpers;
+using User.Infra.CrossCutting.Messages;
 using User.Services.DTOs;
 
 namespace User.API.Controllers
@@ -23,7 +24,7 @@ namespace User.API.Controllers
         public AuthController(
             HelperPassword helperPassword,
             IConfiguration configuration,
-            ITokenGenerator tokenGenerator, 
+            ITokenGenerator tokenGenerator,
             IUserService userService)
         {
             _helperPassword = helperPassword;
@@ -37,24 +38,21 @@ namespace User.API.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                    return ResultNotAuthorized("User not authorized.");
-
                 var userDto = await FindUser(loginVm.Login);
 
                 if (loginVm.Login.ToLower() == userDto.Email.ToLower() && !_helperPassword.CompareHash(loginVm.Password, userDto.Password, userDto.Id))
-                    return ResultNotAuthorized("User not authorized.");
+                    return ResultNotAuthorized(Messages.UnauthorizedUser);
             }
             catch (DomainException domainEx)
             {
-                return ResultNotAuthorized(domainEx.Message);                
+                return ResultNotFound(domainEx.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
 
-            return ResultOk("Authenticaded user.", new
+            return ResultOk(Messages.AuthenticatedUser, new
             {
                 Token = _tokenGenerator.GenerateToken(loginVm.Login),
                 TokenExpires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:HoursToExpire"]))
@@ -63,13 +61,10 @@ namespace User.API.Controllers
 
         private async Task<UserDTO> FindUser(string login)
         {
-            if (string.IsNullOrEmpty(login))
-                throw new DomainException("login can't be null or empty");
-
             var user = await _userService.GetByEmail(login);
 
             if (user == null)
-                throw new DomainException("user not founded");
+                throw new DomainException(Messages.UserNotFound);
 
             return user;
         }

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using User.API.ViewModels;
 using User.Domain.Interfaces.Services;
+using User.Infra.CrossCutting.Messages;
 using User.Services.DTOs;
 
 namespace User.API.Controllers
@@ -34,14 +35,14 @@ namespace User.API.Controllers
 
                     var uri = new Uri($"api/user/{userCreated.Id}", UriKind.RelativeOrAbsolute);
 
-                    return ResultCreated(uri, "User created", userCreated);
+                    return ResultCreated(uri, Messages.UserCreated, userCreated);
                 }
 
-                return ResultNotFound("User not found");
+                return ResultNotFound(Messages.UserNotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
             
         }
@@ -56,14 +57,14 @@ namespace User.API.Controllers
                     var user = _mapper.Map<UserDTO>(updateUserVm);
 
                     var result = await _userService.Update(user);
-                    return ResultOk("User updated", result);
+                    return ResultOk(Messages.UserUpdated, result);
                 }
 
-                return ResultNotFound("User not found");
+                return ResultNotFound(Messages.UserNotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
         }
 
@@ -73,15 +74,15 @@ namespace User.API.Controllers
             try
             {
                 if (id == null)
-                    return ResultNotFound("User not found");
+                    return ResultNotFound(Messages.UserNotFound);
 
                 await _userService.Delete(id);
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
         }
 
@@ -92,11 +93,11 @@ namespace User.API.Controllers
             {
                 var result = await _userService.Get();
 
-                return Ok(result);
+                return ResultOk(string.Empty, result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
         }
 
@@ -107,11 +108,11 @@ namespace User.API.Controllers
             {
                 var result = await _userService.GetById(id);
 
-                return Ok(result);
+                return ResultOk(string.Empty, result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
         }
 
@@ -122,11 +123,11 @@ namespace User.API.Controllers
             {
                 var result = await _userService.GetByEmail(email);
 
-                return Ok(result);
+                return ResultOk(string.Empty, result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResultInternalError(ex.Message);
+                return ResultInternalError(Messages.SystemError);
             }
         }
     }

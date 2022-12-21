@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace User.API.ViewModels
 {
-    public class ChangePasswordViewModel
+    public class UpdatePasswordViewModel
     {
         [Required(ErrorMessage = "Id can't be null")]
         [JsonProperty(PropertyName = "id")]
@@ -23,8 +23,8 @@ namespace User.API.ViewModels
         [MinLength(6, ErrorMessage = "Minimum characters is 10.")]
         [MaxLength(18, ErrorMessage = "Maximum characters is 180.")]
         [RegularExpression(
-            @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$",
-            ErrorMessage = "The email is not valid.")]
+            @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+            ErrorMessage = "Your password must contain at least one uppercase, lowercase, number and contain at least one special characters letter.")]
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
     }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
@@ -40,7 +41,9 @@ namespace User.API
             {
                 options.UseMySql(
                     connectionString: Configuration.GetConnectionString("default"),
-                    serverVersion: new MySqlServerVersion(new Version(8, 0)));
+                    serverVersion: new MySqlServerVersion(new Version(8, 0)))
+                .EnableSensitiveDataLogging()
+                .UseLoggerFactory(LoggerFactory.Create(build => build.AddConsole()));
             });
 
             #region "JWT"
@@ -120,7 +123,7 @@ namespace User.API
                 cfg.CreateMap<Domain.Entities.User, UserDTO>().ReverseMap();
                 cfg.CreateMap<CreateUserViewModel, UserDTO>().ReverseMap();
                 cfg.CreateMap<UpdateUserViewModel, UserDTO>().ReverseMap();
-                cfg.CreateMap<ChangePasswordViewModel, UserDTO>().ReverseMap();
+                cfg.CreateMap<UpdatePasswordViewModel, UserDTO>().ReverseMap();
             });
 
             #region DependenceInjection
@@ -154,6 +157,8 @@ namespace User.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

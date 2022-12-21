@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -23,44 +24,53 @@ namespace User.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateUserViewModel createUserVm)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var user = _mapper.Map<UserDTO>(createUserVm);
+                var user = _mapper.Map<UserDTO>(createUserVm);
 
-                    var userCreated = await _userService.Create(user);
+                var userCreated = await _userService.Create(user);
 
-                    var uri = new Uri($"api/user/{userCreated.Id}", UriKind.RelativeOrAbsolute);
+                var uri = new Uri($"api/user/{userCreated.Id}", UriKind.RelativeOrAbsolute);
 
-                    return ResultCreated(uri, Messages.UserCreated, userCreated);
-                }
-
-                return ResultNotFound(Messages.UserNotFound);
+                return ResultCreated(uri, Messages.UserCreated, userCreated);
             }
             catch (Exception)
             {
                 return ResultInternalError(Messages.SystemError);
             }
-            
+
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] UpdateUserViewModel updateUserVm)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var user = _mapper.Map<UserDTO>(updateUserVm);
+                var user = _mapper.Map<UserDTO>(updateUserVm);
 
-                    var result = await _userService.Update(user);
-                    return ResultOk(Messages.UserUpdated, result);
-                }
+                var result = await _userService.Update(user);
+                return ResultOk(Messages.UserUpdated, result);
+            }
+            catch (Exception)
+            {
+                return ResultInternalError(Messages.SystemError);
+            }
+        }
 
-                return ResultNotFound(Messages.UserNotFound);
+        [HttpPut("update-password")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordViewModel updatePwVm)
+        {
+            try
+            {
+                var user = _mapper.Map<UserDTO>(updatePwVm);
+
+                var result = await _userService.UpdatePassword(user);
+                return ResultOk(Messages.UserUpdated, result);
             }
             catch (Exception)
             {
@@ -69,6 +79,7 @@ namespace User.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -78,7 +89,7 @@ namespace User.API.Controllers
 
                 await _userService.Delete(id);
 
-                return Ok();
+                return ResultOk(Messages.UserDeleted, null);
             }
             catch (Exception)
             {
@@ -87,6 +98,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             try
@@ -102,6 +114,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -117,6 +130,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet("{email}/by-email")]
+        [Authorize]
         public async Task<IActionResult> Get(string email)
         {
             try

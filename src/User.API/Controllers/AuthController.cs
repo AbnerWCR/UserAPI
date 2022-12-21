@@ -54,8 +54,8 @@ namespace User.API.Controllers
 
             return ResultOk(Messages.AuthenticatedUser, new
             {
-                Token = _tokenGenerator.GenerateToken(loginVm.Login),
-                TokenExpires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:HoursToExpire"]))
+                token = _tokenGenerator.GenerateToken(loginVm.Login),
+                tokenExpires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:HoursToExpire"]))
             });
         }
 

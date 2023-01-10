@@ -37,7 +37,7 @@ namespace User.Services.Services
 
             user = await _userRepository.CreateAsync(user);
 
-            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
+            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             user.Password.CreatePasswordHash(user.Id);
 
             user = await _userRepository.UpdatePasswordAsync(user);
@@ -70,7 +70,7 @@ namespace User.Services.Services
                 throw new DomainException("user not found.");
 
             var user = _mapper.Map<Entity.User>(userExists);
-            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
+            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             user.Password.CreatePasswordHash(user.Id);
         
             var userUpdated = await _userRepository.UpdatePasswordAsync(user);

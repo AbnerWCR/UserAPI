@@ -17,7 +17,7 @@ namespace User.API.Token
             _configuration = configuration;
         }
 
-        public string GenerateToken(string login)
+        public string GenerateToken(string login, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -28,7 +28,7 @@ namespace User.API.Token
                 Subject = new ClaimsIdentity(new Claim[]
                 { 
                     new Claim(ClaimTypes.Name, login),
-                    new Claim(ClaimTypes.Role, "User")
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:HoursToExpire"])),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

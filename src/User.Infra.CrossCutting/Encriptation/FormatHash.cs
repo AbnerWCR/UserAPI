@@ -1,7 +1,6 @@
 ﻿using Konscious.Security.Cryptography;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace User.Infra.CrossCutting.Encriptation
@@ -10,8 +9,6 @@ namespace User.Infra.CrossCutting.Encriptation
     {
         public static byte[] Salt(Guid guid)
         {
-            //var buffer = new byte[128];
-            //var rng = new RNGCryptoServiceProvider();
             var buffer = guid.ToByteArray();
 
             return buffer;

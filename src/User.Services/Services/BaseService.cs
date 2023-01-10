@@ -1,35 +1,48 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using User.Domain.DTOs;
 using User.Domain.Entities;
 using User.Domain.Interfaces;
 
 namespace User.Services.Services
 {
-    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
+    public class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> 
+        where TDto : BaseDto
+        where TEntity : BaseEntity
     {
         private readonly IBaseRepository<TEntity> _baseRepository;
+        private readonly IMapper _mapper;
 
-        public BaseService(IBaseRepository<TEntity> baseRepository)
+        public BaseService(IBaseRepository<TEntity> baseRepository, IMapper mapper)
         {
             _baseRepository = baseRepository;
+            _mapper = mapper;
         }
 
-        public virtual async Task<TEntity> Create(TEntity obj)
+        public virtual async Task<TDto> Create(TDto obj)
         {
             if (obj == null)
                 throw new Exception("invalid object");
 
-            return await _baseRepository.CreateAsync(obj);
+            var entity = _mapper.Map<TEntity>(obj);
+
+            var created = await _baseRepository.CreateAsync(entity);
+
+            return _mapper.Map<TDto>(created);
         }
 
-        public virtual async Task<TEntity> Update(TEntity obj)
+        public virtual async Task<TDto> Update(TDto obj)
         {
             if (obj == null)
                 throw new Exception("invalid object");
 
-            return await _baseRepository.UpdateAsync(obj);
+            var entity = _mapper.Map<TEntity>(obj);
+
+            var updated = await _baseRepository.UpdateAsync(entity);
+
+            return _mapper.Map<TDto>(updated);
         }
 
         public async Task Delete(Guid id)
@@ -40,17 +53,21 @@ namespace User.Services.Services
             await _baseRepository.RemoveAsync(id);
         }
 
-        public async Task<IList<TEntity>> Get()
+        public async Task<IList<TDto>> Get()
         {
-            return await _baseRepository.GetAllAsync();
+            var entities = await _baseRepository.GetAllAsync();
+
+            return _mapper.Map<IList<TDto>>(entities);
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<TDto> GetById(Guid id)
         {
             if (id == null)
                 throw new Exception("invalid field");
 
-            return await _baseRepository.GetAsync(id);
+            var entity = await _baseRepository.GetAsync(id);
+
+            return _mapper.Map<TDto>(entity);
         }
 
        

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using User.Domain.DTOs;
+using User.Domain.Entities;
 
 namespace User.Domain.Interfaces
 {
-    public interface IBaseService<TDto> where TDto : class
+    public interface IBaseService<TDto, TEntity> 
+        where TDto : BaseDto
+        where TEntity : BaseEntity
     {
         Task<TDto> Create(TDto obj);
 

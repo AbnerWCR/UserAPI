@@ -12,23 +12,34 @@ namespace User.Infra.Data.Mapping
 
             builder.HasKey(p => p.Id);
 
-            builder.Property(p => p.Name)
-                .HasConversion(p => p.ToString(), prop => prop)
+            builder.OwnsOne(x => x.Name)
+                .Property(x => x.FirstName)
                 .IsRequired()
-                .HasColumnName("NAME")
+                .HasColumnName("FIRST_NAME")
                 .HasColumnType("varchar(50)");
 
-            builder.Property(p => p.Email)
-                .HasConversion(p => p.ToString(), prop => prop)
+            builder.OwnsOne(x => x.Name)
+                .Property(x => x.LastName)
+                .HasColumnName("LAST_NAME")
+                .HasColumnType("varchar(50)");
+
+            builder.OwnsOne(x => x.Email)
+                .Property(x => x.Address)
                 .IsRequired()
                 .HasColumnName("EMAIL")
                 .HasColumnType("varchar(180)");
 
-            builder.Property(p => p.Password)
-                .HasConversion(p => p.ToString(), prop => prop)
+            builder.OwnsOne(x => x.Password)
+                .Property(x => x.PasswordHash)
                 .IsRequired()
                 .HasColumnName("PASSWORD")
                 .HasColumnType("varchar(200)");
+
+            builder.OwnsOne(x => x.Role)
+                .Property(x => x.UserRole)
+                .IsRequired()
+                .HasColumnName("ROLE")
+                .HasColumnType("varchar(6)");
         }
     }
 }

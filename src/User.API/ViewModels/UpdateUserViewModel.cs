@@ -10,11 +10,17 @@ namespace User.API.ViewModels
         [JsonProperty(PropertyName = "id")]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Name can't be null")]
+        [Required(ErrorMessage = "First Name can't be null")]
         [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
         [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
+        [JsonProperty(PropertyName = "first_name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last Name can't be null")]
+        [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
+        [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
+        [JsonProperty(PropertyName = "last_name")]
+        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email can't be null")]
         [MinLength(10, ErrorMessage = "Minimum characters is 10.")]

@@ -20,8 +20,8 @@ namespace User.API.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password can't be null")]
-        [MinLength(6, ErrorMessage = "Minimum characters is 10.")]
-        [MaxLength(18, ErrorMessage = "Maximum characters is 180.")]
+        [MinLength(6, ErrorMessage = "Minimum characters is 6.")]
+        [MaxLength(18, ErrorMessage = "Maximum characters is 18.")]
         [RegularExpression(
             @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
             ErrorMessage = "Your password must contain at least one uppercase, lowercase, number and contain at least one special characters letter.")]

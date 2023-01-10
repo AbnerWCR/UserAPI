@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using User.Domain.Interfaces;
 using User.Domain.Interfaces.Services;
 using User.Infra.CrossCutting.Exceptions;
-using User.Infra.CrossCutting.Helpers;
 using User.Services.DTOs;
 using Entity = User.Domain.Entities;
 
@@ -13,15 +14,15 @@ namespace User.Services.Services
 {
     public class UserService : IUserService
     {
-        private readonly HelperPassword _helperPassword;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
-        public UserService(IMapper mapper, IUserRepository userRepository, HelperPassword helperPassword)
+        public UserService(IMapper mapper, IUserRepository userRepository, IConfiguration configuration)
         {
             _mapper = mapper;
             _userRepository = userRepository;
-            _helperPassword = helperPassword;
+            _configuration = configuration;
         }
 
         public async Task<UserDTO> Create(UserDTO userDto)
@@ -29,15 +30,16 @@ namespace User.Services.Services
             var user = _mapper.Map<Entity.User>(userDto);
             user.Validate();
 
-            var userExists = await UserExists(user.Email);
+            var userExists = await UserExists(user.Email.Address);
 
             if (userExists)
                 throw new DomainException("user already exists.");
 
             user = await _userRepository.CreateAsync(user);
 
-            var password = _helperPassword.CreatePasswordHash(user.Password, user.Id);
-            user.ChangePassword(password);
+            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
+            user.Password.CreatePasswordHash(user.Id);
+
             user = await _userRepository.UpdatePasswordAsync(user);
 
             return _mapper.Map<UserDTO>(user);
@@ -51,9 +53,9 @@ namespace User.Services.Services
                 throw new DomainException("user not found.");
 
             var user = _mapper.Map<Entity.User>(userRepo);
-            user.ChangeName(userDto.Name);
-            user.ChangeEmail(userDto.Email);
-            user.Validate();           
+            user.Name.ChangeFirstName(userDto.FirstName);
+            user.Name.ChangeLastName(userDto.LastName);
+            user.Email.ChangeAddress(userDto.Email);
 
             var userUpdated = await _userRepository.UpdateAsync(user);
 
@@ -67,10 +69,10 @@ namespace User.Services.Services
             if (userExists == null)
                 throw new DomainException("user not found.");
 
-            var password = _helperPassword.CreatePasswordHash(userDto.Password, userDto.Id);
             var user = _mapper.Map<Entity.User>(userExists);
-            user.ChangePassword(password);            
-
+            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
+            user.Password.CreatePasswordHash(user.Id);
+        
             var userUpdated = await _userRepository.UpdatePasswordAsync(user);
 
             return _mapper.Map<UserDTO>(userUpdated);

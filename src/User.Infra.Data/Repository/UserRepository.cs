@@ -21,7 +21,7 @@ namespace User.Infra.Data.Repository
         public async Task<Entity.User> GetByEmail(string email)
         {
             var user = await _userContext.Users
-                                            .Where(x => string.Equals(x.Email.ToLower(), email.ToLower()))
+                                            .Where(x => string.Equals(x.Email.Address.ToLower(), email.ToLower()))
                                             .AsNoTracking()
                                             .ToListAsync();
 
@@ -31,7 +31,7 @@ namespace User.Infra.Data.Repository
         public async Task<Entity.User> UpdatePasswordAsync(Entity.User obj)
         {
             _userContext.Attach(obj);
-            _userContext.Entry(obj).Property(p => p.Password).IsModified = true;
+            _userContext.Entry(obj).Property(p => p.Password.PasswordHash).IsModified = true;
             await _userContext.SaveChangesAsync();
 
             return obj;

@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using User.Domain.Validations;
+using User.Domain.VOs;
 using User.Infra.CrossCutting.Exceptions;
 
 namespace User.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public Name Name { get; private set; }
+        public Email Email { get; private set; }
+        public Password Password { get; private set; }
+        public Role Role { get; private set; }
 
         //empty constructor for EF
         protected User()
@@ -16,31 +19,14 @@ namespace User.Domain.Entities
 
         }
 
-        public User(string name, string email, string password)
+        public User(Name name, Email email, Password password, Role role)
         {
             Name = name;
             Email = email;
             Password = password;
+            Role = role;
             _errors = new List<string>();
 
-            Validate();
-        }
-
-        public void ChangeName(string name)
-        {
-            Name = name;
-            Validate();
-        }
-
-        public void ChangeEmail(string email)
-        {
-            Email = email;
-            Validate();
-        }
-
-        public void ChangePassword(string password)
-        {
-            Password = password;
             Validate();
         }
 
@@ -52,10 +38,7 @@ namespace User.Domain.Entities
 
             if (!validation.IsValid)
             {
-                foreach (var error in validation.Errors)
-                {
-                    _errors.Add(error.ErrorMessage);    
-                }
+                _errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
 
                 throw new DomainException("some invalid fields", _errors);
             }

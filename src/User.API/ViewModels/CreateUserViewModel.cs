@@ -5,11 +5,17 @@ namespace User.API.ViewModels
 {
     public class CreateUserViewModel
     {
-        [Required(ErrorMessage = "Name can't be null")]
+        [Required(ErrorMessage = "First Name can't be null")]
         [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
         [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
+        [JsonProperty(PropertyName = "first_name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last Name can't be null")]
+        [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
+        [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
+        [JsonProperty(PropertyName = "last_name")]
+        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email can't be null")]
         [MinLength(10, ErrorMessage = "Minimum characters is 10.")]
@@ -21,8 +27,8 @@ namespace User.API.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password can't be null")]
-        [MinLength(6, ErrorMessage = "Minimum characters is 10.")]
-        [MaxLength(18, ErrorMessage = "Maximum characters is 180.")]
+        [MinLength(6, ErrorMessage = "Minimum characters is 6.")]
+        [MaxLength(18, ErrorMessage = "Maximum characters is 18.")]
         [RegularExpression(
             @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", 
             ErrorMessage = "Your password must contain at least one uppercase, lowercase, number and contain at least one special characters letter.")]

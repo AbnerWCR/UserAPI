@@ -2,7 +2,7 @@
 
 <h1 align="center">API Rest de gerenciamento e autenticação de usuários</h1>
 
-<p align="center">API criata para estudo de gerenciamento, validação e autenticação de usuários</p>
+<p align="center">API criada para estudo de gerenciamento, validação e autenticação de usuários</p>
 
 <p align="center" height="400" width="400">
  <a href="#objetivo">Objetivo</a> •

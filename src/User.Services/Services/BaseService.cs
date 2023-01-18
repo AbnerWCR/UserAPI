@@ -70,9 +70,9 @@ namespace User.Services.Services
             return _mapper.Map<TDto>(entity);
         }
 
-        public virtual async Task SaveError(Exception ex)
+        public virtual void ReturnError(string ex)
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            throw new Exception(ex);
         }
     }
 }

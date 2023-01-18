@@ -50,7 +50,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -76,7 +76,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -102,7 +102,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -124,7 +124,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -141,7 +141,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
         }
 
@@ -160,7 +160,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -178,7 +178,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDTOs;
@@ -199,7 +199,7 @@ namespace User.Services.Services
             }
             catch (Exception ex)
             {
-                await SaveError(ex);
+                ReturnError(ex.Message);
             }
 
             return userDto;
@@ -207,9 +207,19 @@ namespace User.Services.Services
 
         private async Task<bool> UserExists(string email)
         {
-            var user = await _userRepository.GetByEmail(email);
+            bool exist = false;
+            try
+            {
+                var user = await _userRepository.GetByEmail(email);
 
-            return user != null;
+                exist = user != null;
+            }
+            catch (Exception ex)
+            {
+                ReturnError(ex.Message);
+            }
+
+            return exist;
         }
 
         

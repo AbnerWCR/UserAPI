@@ -1,13 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 using User.API.ViewModels;
+using User.Domain.DTOs;
+using User.Domain.Entities;
+using User.Domain.Interfaces;
+using User.Infra.CrossCutting.Messages;
 
 namespace User.API.Controllers
 {
     [ApiController]
     public class BaseController : Controller
     {
+        private readonly IBaseService<ErrorDTO, Error> _errorService;
+
+        public BaseController(IBaseService<ErrorDTO, Error> errorService)
+        {
+            _errorService = errorService;
+        }
+
         protected IActionResult ResultOk(string message, dynamic data)
         {
             var resultVm = new ResultViewModel(message, true, data);
@@ -53,6 +65,13 @@ namespace User.API.Controllers
             };
 
             return StatusCode(401, resultVm.ToJson());
+        }
+
+        protected async Task<IActionResult> SaveError(ErrorDTO errorDTO)
+        {
+            await _errorService.Create(errorDTO);
+
+            return ResultInternalError(Messages.SystemError);
         }
     }
 }

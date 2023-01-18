@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using User.Domain.Entities;
 using User.Infra.Data.Mapping;
 using Entity = User.Domain.Entities;
 
@@ -17,13 +18,14 @@ namespace User.Infra.Data.Context
         }
 
         public DbSet<Entity.User> Users { get; set; }
+        public DbSet<Error> Errors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //base.OnModelCreating(builder);
-
             builder.ApplyConfiguration(new UserMap());
-            //builder.Entity<Entity.User>(new UserMap().Configure);
+            builder.ApplyConfiguration(new ErrorMap());
+
+            base.OnModelCreating(builder);
         }
     }
 }

@@ -5,6 +5,9 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using User.API.ViewModels;
+using User.Domain.DTOs;
+using User.Domain.Entities;
+using User.Domain.Interfaces;
 using User.Domain.Interfaces.API;
 using User.Domain.Interfaces.Services;
 using User.Domain.VOs;
@@ -25,7 +28,9 @@ namespace User.API.Controllers
         public AuthController(
             IConfiguration configuration,
             ITokenGenerator tokenGenerator,
-            IUserService userService)
+            IUserService userService,
+            IBaseService<ErrorDTO, Error> errorService)
+            : base (errorService)
         {
             _tokenGenerator = tokenGenerator;
             _userService = userService;

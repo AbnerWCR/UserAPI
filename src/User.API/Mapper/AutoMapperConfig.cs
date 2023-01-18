@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using User.API.ViewModels;
+using User.Domain.DTOs;
+using User.Domain.Entities;
 using User.Services.DTOs;
 
 namespace User.API.Mapper
@@ -23,6 +25,9 @@ namespace User.API.Mapper
             cfg.CreateMap<UpdateUserViewModel, UserDTO>().ReverseMap();
             cfg.CreateMap<UpdatePasswordViewModel, UserDTO>().ReverseMap();
             cfg.CreateMap<UpdateUserRoleViewModel, UserDTO>().ReverseMap();
+
+            cfg.CreateMap<Error, ErrorDTO>()
+            .ReverseMap();
 
             return cfg;
         }

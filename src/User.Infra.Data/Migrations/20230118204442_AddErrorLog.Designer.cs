@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using User.Infra.Data.Context;
 
 namespace User.Infra.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20230118204442_AddErrorLog")]
+    partial class AddErrorLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,7 @@ namespace User.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("USERS");
+                    b.ToTable("USER");
                 });
 
             modelBuilder.Entity("User.Domain.Entities.User", b =>
@@ -64,7 +66,7 @@ namespace User.Infra.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("USERS");
+                            b1.ToTable("USER");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -86,7 +88,7 @@ namespace User.Infra.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("USERS");
+                            b1.ToTable("USER");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -104,7 +106,7 @@ namespace User.Infra.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("USERS");
+                            b1.ToTable("USER");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -122,7 +124,7 @@ namespace User.Infra.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("USERS");
+                            b1.ToTable("USER");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

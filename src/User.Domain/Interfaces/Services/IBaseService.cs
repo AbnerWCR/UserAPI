@@ -20,6 +20,6 @@ namespace User.Domain.Interfaces
 
         Task<TDto> GetById(Guid id);
 
-        Task SaveError(Exception ex);
+        void ReturnError(string ex);
     }
 }

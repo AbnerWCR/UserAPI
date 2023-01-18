@@ -9,7 +9,8 @@ using User.Infra.Data.Context;
 
 namespace User.Infra.Data.Repository
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
+        where TEntity : BaseEntity
     {
         private readonly UserContext _userContext;
 

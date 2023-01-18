@@ -8,7 +8,7 @@ namespace User.Infra.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<Entity.User> builder)
         {
-            builder.ToTable("USER");
+            builder.ToTable("USERS");
 
             builder.HasKey(p => p.Id);
 

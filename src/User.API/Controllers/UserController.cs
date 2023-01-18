@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using User.API.ViewModels;
+using User.Domain.DTOs;
+using User.Domain.Entities;
+using User.Domain.Interfaces;
 using User.Domain.Interfaces.Services;
 using User.Domain.Roles;
 using User.Infra.CrossCutting.Messages;
@@ -18,7 +21,8 @@ namespace User.API.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IBaseService<ErrorDTO, Error> errorService, IUserService userService, IMapper mapper)
+            : base(errorService)
         {
             _userService = userService;
             _mapper = mapper;
@@ -38,11 +42,11 @@ namespace User.API.Controllers
 
                 return ResultCreated(uri, Messages.UserCreated, userCreated);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
-
         }
 
         [HttpPut]
@@ -56,9 +60,10 @@ namespace User.API.Controllers
                 var result = await _userService.Update(user);
                 return ResultOk(Messages.UserUpdated, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -73,9 +78,10 @@ namespace User.API.Controllers
                 var result = await _userService.UpdatePassword(user);
                 return ResultOk(Messages.UserUpdated, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -90,9 +96,10 @@ namespace User.API.Controllers
                 var result = await _userService.UpdateRole(user);
                 return ResultOk(Messages.UserUpdated, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -109,9 +116,10 @@ namespace User.API.Controllers
 
                 return ResultOk(Messages.UserDeleted, null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -125,9 +133,10 @@ namespace User.API.Controllers
 
                 return ResultOk(string.Empty, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -141,9 +150,10 @@ namespace User.API.Controllers
 
                 return ResultOk(string.Empty, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
 
@@ -157,9 +167,10 @@ namespace User.API.Controllers
 
                 return ResultOk(string.Empty, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ResultInternalError(Messages.SystemError);
+                var errorDto = new ErrorDTO(ex.Message);
+                return await SaveError(errorDto);
             }
         }
     }

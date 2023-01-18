@@ -28,14 +28,8 @@ namespace User.Domain.Validations
                 .WithMessage("Maximum characters is 50.");
 
             RuleFor(x => x.LastName)
-                .NotEmpty()
-                .WithMessage("The last name can't be empty.")
-
-                .NotNull()
-                .WithMessage("The last name can't be null.")
-
-                .MinimumLength(3)
-                .WithMessage("Minimum characters is 3.")
+                .MinimumLength(0)
+                .WithMessage("Minimum characters is 0.")
 
                 .MaximumLength(50)
                 .WithMessage("Maximum characters is 50.");

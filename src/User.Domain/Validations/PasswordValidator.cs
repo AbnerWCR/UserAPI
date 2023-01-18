@@ -15,12 +15,6 @@ namespace User.Domain.Validations
                 .WithMessage("The Value object Password can't be null.");
 
             RuleFor(x => x.PasswordHash)
-                .NotEmpty()
-                .WithMessage("The password can't be empty.")
-
-                .NotNull()
-                .WithMessage("The password can't be null.")
-
                 .MinimumLength(6)
                 .WithMessage("Minimum characters is 6.")
 
@@ -29,10 +23,10 @@ namespace User.Domain.Validations
 
             RuleFor(x => x.PasswordText)
                 .NotEmpty()
-                .WithMessage("The password can't be empty.")
+                .WithMessage("The password text can't be empty.")
 
                 .NotNull()
-                .WithMessage("The password can't be null.")
+                .WithMessage("The password text can't be null.")
 
                 .MinimumLength(6)
                 .WithMessage("Minimum characters is 6.")

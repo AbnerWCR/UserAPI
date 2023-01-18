@@ -3,7 +3,7 @@ using User.Domain.DTOs;
 
 namespace User.Services.DTOs
 {
-    public class UserDTO : BaseDto
+    public class UserDTO : BaseDTO
     {   
         [JsonProperty(PropertyName = "first_name")]
         public string FirstName { get; set; }
@@ -16,6 +16,9 @@ namespace User.Services.DTOs
 
         [JsonIgnore]
         public string Password { get; set; }
+
+        [JsonIgnore]
+        public string PasswordHash { get; set; }
 
         [JsonProperty(PropertyName = "role")]
         public string Role { get; set; }

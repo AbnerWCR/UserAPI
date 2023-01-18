@@ -11,8 +11,8 @@ namespace User.API.ViewModels
         [JsonProperty(PropertyName = "first_name")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last Name can't be null")]
-        [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
+        //[Required(ErrorMessage = "Last Name can't be null")]
+        [MinLength(0, ErrorMessage = "Minimum characters is 0.")]
         [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
         [JsonProperty(PropertyName = "last_name")]
         public string LastName { get; set; }

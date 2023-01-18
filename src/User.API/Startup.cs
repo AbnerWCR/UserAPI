@@ -131,7 +131,7 @@ namespace User.API
 
             services.AddSingleton(autoMapperConfig.CreateMapper());
             services.AddScoped<IBaseRepository<Domain.Entities.User>, BaseRepository<Domain.Entities.User>>();
-            services.AddScoped<IBaseService<BaseDto, BaseEntity>, BaseService<BaseDto, BaseEntity>>();
+            services.AddScoped<IBaseService<UserDTO, Domain.Entities.User>, BaseService<UserDTO, Domain.Entities.User>>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();

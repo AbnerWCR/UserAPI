@@ -7,7 +7,7 @@ using User.Domain.Entities;
 namespace User.Domain.Interfaces
 {
     public interface IBaseService<TDto, TEntity> 
-        where TDto : BaseDto
+        where TDto : BaseDTO
         where TEntity : BaseEntity
     {
         Task<TDto> Create(TDto obj);
@@ -19,5 +19,7 @@ namespace User.Domain.Interfaces
         Task<IList<TDto>> Get();
 
         Task<TDto> GetById(Guid id);
+
+        Task SaveError(Exception ex);
     }
 }

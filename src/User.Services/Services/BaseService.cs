@@ -9,7 +9,7 @@ using User.Domain.Interfaces;
 namespace User.Services.Services
 {
     public class BaseService<TDto, TEntity> : IBaseService<TDto, TEntity> 
-        where TDto : BaseDto
+        where TDto : BaseDTO
         where TEntity : BaseEntity
     {
         private readonly IBaseRepository<TEntity> _baseRepository;
@@ -45,7 +45,7 @@ namespace User.Services.Services
             return _mapper.Map<TDto>(updated);
         }
 
-        public async Task Delete(Guid id)
+        public virtual async Task Delete(Guid id)
         {
             if (id == null)
                 throw new Exception("invalid field");
@@ -53,14 +53,14 @@ namespace User.Services.Services
             await _baseRepository.RemoveAsync(id);
         }
 
-        public async Task<IList<TDto>> Get()
+        public virtual async Task<IList<TDto>> Get()
         {
             var entities = await _baseRepository.GetAllAsync();
 
             return _mapper.Map<IList<TDto>>(entities);
         }
 
-        public async Task<TDto> GetById(Guid id)
+        public virtual async Task<TDto> GetById(Guid id)
         {
             if (id == null)
                 throw new Exception("invalid field");
@@ -70,6 +70,9 @@ namespace User.Services.Services
             return _mapper.Map<TDto>(entity);
         }
 
-       
+        public virtual async Task SaveError(Exception ex)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+        }
     }
 }

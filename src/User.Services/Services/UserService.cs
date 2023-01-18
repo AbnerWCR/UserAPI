@@ -12,106 +12,197 @@ using Entity = User.Domain.Entities;
 
 namespace User.Services.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService<UserDTO, Entity.User>, IUserService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
         public UserService(IMapper mapper, IUserRepository userRepository, IConfiguration configuration)
+            : base(userRepository, mapper)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _configuration = configuration;
         }
 
-        public async Task<UserDTO> Create(UserDTO userDto)
-        {
-            var user = _mapper.Map<Entity.User>(userDto);
-            user.Validate();
+        public override async Task<UserDTO> Create(UserDTO userDto)
+        {          
+            try
+            {
+                var user = _mapper.Map<Entity.User>(userDto);
+                user.Validate();
 
-            var userExists = await UserExists(user.Email.Address);
+                var userExists = await UserExists(user.Email.Address);
 
-            if (userExists)
-                throw new DomainException("user already exists.");
+                if (userExists)
+                    throw new DomainException("user already exists.");
 
-            user = await _userRepository.CreateAsync(user);
+                user.Role.DefaultRole();
+                user = await _userRepository.CreateAsync(user);
 
-            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            user.Password.CreatePasswordHash(user.Id);
+                user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                user.Password.CreatePasswordHash(user.Id);
 
-            user = await _userRepository.UpdatePasswordAsync(user);
+                user = await _userRepository.UpdatePasswordAsync(user);
 
-            return _mapper.Map<UserDTO>(user);
+                userDto = _mapper.Map<UserDTO>(user);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
         }
 
-        public async Task<UserDTO> Update(UserDTO userDto)
+        public override async Task<UserDTO> Update(UserDTO userDto)
         {
-            var userRepo = await GetById(userDto.Id);
+            try
+            {
+                var userRepo = await GetById(userDto.Id);
 
-            if (userRepo == null)
-                throw new DomainException("user not found.");
+                if (userRepo == null)
+                    throw new DomainException("user not found.");
 
-            var user = _mapper.Map<Entity.User>(userRepo);
-            user.Name.ChangeFirstName(userDto.FirstName);
-            user.Name.ChangeLastName(userDto.LastName);
-            user.Email.ChangeAddress(userDto.Email);
+                var user = _mapper.Map<Entity.User>(userRepo);
+                user.Name.ChangeFirstName(userDto.FirstName);
+                user.Name.ChangeLastName(userDto.LastName);
+                user.Email.ChangeAddress(userDto.Email);
 
-            var userUpdated = await _userRepository.UpdateAsync(user);
+                var userUpdated = await _userRepository.UpdateAsync(user);
 
-            return _mapper.Map<UserDTO>(userUpdated);
+                userDto = _mapper.Map<UserDTO>(userUpdated);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
         }
 
         public async Task<UserDTO> UpdatePassword(UserDTO userDto)
         {
-            var userExists = await GetByEmail(userDto.Email);
+            try
+            {
+                var userExists = await GetByEmail(userDto.Email);
 
-            if (userExists == null)
-                throw new DomainException("user not found.");
+                if (userExists == null)
+                    throw new DomainException("user not found.");
 
-            var user = _mapper.Map<Entity.User>(userExists);
-            user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            user.Password.CreatePasswordHash(user.Id);
-        
-            var userUpdated = await _userRepository.UpdatePasswordAsync(user);
+                userExists.Password = userDto.Password;
+                var user = _mapper.Map<Entity.User>(userExists);
+                user.Password.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                user.Password.CreatePasswordHash(user.Id);
 
-            return _mapper.Map<UserDTO>(userUpdated);
+                var userUpdated = await _userRepository.UpdatePasswordAsync(user);
+
+                userDto = _mapper.Map<UserDTO>(userUpdated);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
         }
 
-        public async Task Delete(Guid id)
+        public async Task<UserDTO> UpdateRole(UserDTO userDto)
         {
-            if (id == null)
-                throw new DomainException("invalid field.");
+            try
+            {
+                var userExists = await GetByEmail(userDto.Email);
 
-            await _userRepository.RemoveAsync(id);
+                if (userExists == null)
+                    throw new DomainException("user not found.");
+
+                var user = _mapper.Map<Entity.User>(userExists);
+                user.Role.ChangeRole();
+
+                await _userRepository.UpdateRoleAsync(user);                
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
         }
 
-        public async Task<UserDTO> GetById(Guid id)
+        public override async Task Delete(Guid id)
         {
-            if (id == null)
-                throw new DomainException("invalid field.");
+            try
+            {
+                if (id == null)
+                    throw new DomainException("invalid field.");
 
-            var user = await _userRepository.GetAsync(id);
-
-            return _mapper.Map<UserDTO>(user);
+                await _userRepository.RemoveAsync(id);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
         }
 
-        public async Task<IList<UserDTO>> Get()
+        public override async Task<UserDTO> GetById(Guid id)
         {
+            var userDto = new UserDTO();
 
-            var users = await _userRepository.GetAllAsync();
+            try
+            {
+                if (id == null)
+                    throw new DomainException("invalid field.");
 
-            return _mapper.Map<IList<UserDTO>>(users);
+                var user = await _userRepository.GetAsync(id);
+
+                userDto = _mapper.Map<UserDTO>(user);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
+        }
+
+        public override async Task<IList<UserDTO>> Get()
+        {
+            IList<UserDTO> userDTOs = new List<UserDTO>();
+
+            try
+            {
+                var users = await _userRepository.GetAllAsync();
+
+                userDTOs =  _mapper.Map<IList<UserDTO>>(users);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDTOs;
         }
 
         public async Task<UserDTO> GetByEmail(string email)
         {
-            if (string.IsNullOrEmpty(email))
-                throw new DomainException("invalid field.");
+            var userDto = new UserDTO();
 
-            var user = await _userRepository.GetByEmail(email);
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                    throw new DomainException("invalid field.");
 
-            return _mapper.Map<UserDTO>(user);
+                var user = await _userRepository.GetByEmail(email);
+
+                userDto = _mapper.Map<UserDTO>(user);
+            }
+            catch (Exception ex)
+            {
+                await SaveError(ex);
+            }
+
+            return userDto;
         }
 
         private async Task<bool> UserExists(string email)

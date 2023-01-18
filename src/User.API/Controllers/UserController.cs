@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using User.API.ViewModels;
 using User.Domain.Interfaces.Services;
+using User.Domain.Roles;
 using User.Infra.CrossCutting.Messages;
 using User.Services.DTOs;
 
@@ -24,7 +25,7 @@ namespace User.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ADMIN)]
         public async Task<IActionResult> Create([FromBody] CreateUserViewModel createUserVm)
         {
             try
@@ -45,7 +46,7 @@ namespace User.API.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ADMIN)]
         public async Task<IActionResult> Update([FromBody] UpdateUserViewModel updateUserVm)
         {
             try
@@ -62,7 +63,7 @@ namespace User.API.Controllers
         }
 
         [HttpPut("update-password")]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ADMIN)]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordViewModel updatePwVm)
         {
             try
@@ -78,8 +79,25 @@ namespace User.API.Controllers
             }
         }
 
+        [HttpPut("update-role")]
+        [Authorize(Roles = UserRoles.ADMIN)]
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateUserRoleViewModel updateRoleVm)
+        {
+            try
+            {
+                var user = _mapper.Map<UserDTO>(updateRoleVm);
+
+                var result = await _userService.UpdateRole(user);
+                return ResultOk(Messages.UserUpdated, result);
+            }
+            catch (Exception)
+            {
+                return ResultInternalError(Messages.SystemError);
+            }
+        }
+
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ADMIN)]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -98,7 +116,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ALL_ROLES)]
         public async Task<IActionResult> Get()
         {
             try
@@ -114,7 +132,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = UserRoles.PUBLIC)]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -130,7 +148,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet("{email}/by-email")]
-        [Authorize]
+        [Authorize(Roles = UserRoles.ALL_ROLES)]
         public async Task<IActionResult> Get(string email)
         {
             try

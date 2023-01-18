@@ -4,23 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace User.API.ViewModels
 {
-    public class UpdateUserViewModel
+    public class UpdateUserRoleViewModel
     {
         [Required(ErrorMessage = "Id can't be null")]
         [JsonProperty(PropertyName = "id")]
         public Guid Id { get; set; }
-
-        [Required(ErrorMessage = "First Name can't be null")]
-        [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
-        [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
-        [JsonProperty(PropertyName = "first_name")]
-        public string FirstName { get; set; }
-
-        //[Required(ErrorMessage = "Last Name can't be null")]
-        [MinLength(3, ErrorMessage = "Minimum characters is 3.")]
-        [MaxLength(50, ErrorMessage = "Maximum characters is 50.")]
-        [JsonProperty(PropertyName = "last_name")]
-        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email can't be null")]
         [MinLength(10, ErrorMessage = "Minimum characters is 10.")]
@@ -30,5 +18,12 @@ namespace User.API.ViewModels
             ErrorMessage = "The email is not valid.")]
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
+
+        //[Required(ErrorMessage = "Role can't be null")]
+        //[MinLength(5, ErrorMessage = "Minimum characters is 5.")]
+        //[MaxLength(6, ErrorMessage = "Maximum characters is 6.")]
+        //[RegularExpression(@"([A-Z])", ErrorMessage = "Role should only take letters in upper case")]
+        //[JsonProperty(PropertyName = "role")]
+        //public string Role { get; set; }
     }
 }

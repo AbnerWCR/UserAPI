@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using User.Infra.Data.Context;
 
 namespace User.Infra.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20230111192857_AddUserRole")]
+    partial class AddUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,8 +23,7 @@ namespace User.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasColumnName("ID");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -80,6 +81,9 @@ namespace User.Infra.Data.Migrations
                                 .IsRequired()
                                 .HasColumnType("varchar(200)")
                                 .HasColumnName("PASSWORD");
+
+                            b1.Property<string>("PasswordText")
+                                .HasColumnType("longtext");
 
                             b1.HasKey("UserId");
 

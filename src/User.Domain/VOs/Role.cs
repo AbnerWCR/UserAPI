@@ -9,9 +9,15 @@ namespace User.Domain.VOs
     {
         public string UserRole { get; private set; }
 
-        public Role()
+        protected Role()
         {
             
+        }
+
+        public Role(string role)
+        {
+            UserRole = role;
+            Validate();
         }
 
         public void DefaultRole()
@@ -24,6 +30,20 @@ namespace User.Domain.VOs
         {
             UserRole = UserRoles.ADMIN;
             Validate();
+        }
+
+        public void ChangeRole()
+        {
+            switch (UserRole)
+            {
+                case UserRoles.ADMIN:
+                    DefaultRole();
+                    break;
+
+                case UserRoles.PUBLIC:
+                    SetUserAdmin();
+                    break;
+            }
         }
 
         public override bool Validate()

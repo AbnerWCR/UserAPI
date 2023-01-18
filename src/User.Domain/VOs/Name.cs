@@ -11,7 +11,7 @@ namespace User.Domain.VOs
 
         public string FullName => $"{FirstName} {LastName}";
 
-        public Name()
+        protected Name()
         {
 
         }

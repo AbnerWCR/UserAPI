@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using User.Infra.Data.Context;
 
 namespace User.Infra.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20230118105447_Refactor2")]
+    partial class Refactor2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,6 +82,9 @@ namespace User.Infra.Data.Migrations
                                 .IsRequired()
                                 .HasColumnType("varchar(200)")
                                 .HasColumnName("PASSWORD");
+
+                            b1.Property<string>("PasswordText")
+                                .HasColumnType("longtext");
 
                             b1.HasKey("UserId");
 

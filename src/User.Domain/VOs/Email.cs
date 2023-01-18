@@ -8,7 +8,7 @@ namespace User.Domain.VOs
     {
         public string Address { get; private set; }
 
-        public Email()
+        protected Email()
         {
 
         }

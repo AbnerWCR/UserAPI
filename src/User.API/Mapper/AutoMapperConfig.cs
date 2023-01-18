@@ -14,6 +14,7 @@ namespace User.API.Mapper
             .ForMember(x => x.LastName, x => x.MapFrom(u => u.Name.LastName))
             .ForMember(x => x.Email, x => x.MapFrom(u => u.Email.Address))
             .ForMember(x => x.Password, x => x.MapFrom(u => u.Password.PasswordText))
+            .ForMember(x => x.PasswordHash, x => x.MapFrom(u => u.Password.PasswordHash))
             .ForMember(x => x.Role, x => x.MapFrom(u => u.Role.UserRole))
             .ReverseMap();
 
@@ -21,6 +22,7 @@ namespace User.API.Mapper
             cfg.CreateMap<CreateUserViewModel, UserDTO>().ReverseMap();
             cfg.CreateMap<UpdateUserViewModel, UserDTO>().ReverseMap();
             cfg.CreateMap<UpdatePasswordViewModel, UserDTO>().ReverseMap();
+            cfg.CreateMap<UpdateUserRoleViewModel, UserDTO>().ReverseMap();
 
             return cfg;
         }

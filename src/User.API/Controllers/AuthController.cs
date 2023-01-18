@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Text;
@@ -32,6 +33,7 @@ namespace User.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserViewModel loginVm)
         {
             string role = string.Empty;
@@ -42,7 +44,7 @@ namespace User.API.Controllers
                 var passwordVO = new Password(loginVm.Password);
                 passwordVO.AddKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
-                if (loginVm.Login.ToLower() == userDto.Email.ToLower() && !passwordVO.CompareHash(userDto.Password, userDto.Id))
+                if (loginVm.Login.ToLower() == userDto.Email.ToLower() && !passwordVO.CompareHash(userDto.PasswordHash, userDto.Id))
                     return ResultNotAuthorized(Messages.UnauthorizedUser);
 
                 role = userDto.Role;

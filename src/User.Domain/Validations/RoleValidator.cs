@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using User.Domain.VOs;
 
 namespace User.Domain.Validations
@@ -28,7 +25,10 @@ namespace User.Domain.Validations
                 .WithMessage("Minimum characters is 5.")
 
                 .MaximumLength(6)
-                .WithMessage("Maximum characters is 6.");
+                .WithMessage("Maximum characters is 6.")
+
+                .Matches(@"[A-Z]")
+                .WithMessage("The Role is not valid."); ;
         }
     }
 }

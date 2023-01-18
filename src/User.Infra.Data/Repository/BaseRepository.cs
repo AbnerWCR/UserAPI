@@ -28,6 +28,7 @@ namespace User.Infra.Data.Repository
 
         public virtual async Task<TEntity> UpdateAsync(TEntity obj)
         {
+            _userContext.Attach(obj);
             _userContext.Entry(obj).State = EntityState.Modified;
             await _userContext.SaveChangesAsync();
 

@@ -12,7 +12,7 @@ namespace User.Domain.VOs
         public string PasswordHash { get; private set; }
         private byte[] Key { get; set; }
 
-        public Password()
+        protected Password()
         {
 
         }

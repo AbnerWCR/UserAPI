@@ -28,10 +28,30 @@ namespace User.Infra.Data.Repository
             return user.FirstOrDefault();
         }
 
+        public override async Task<Entity.User> UpdateAsync(Entity.User obj)
+        {
+            _userContext.Attach(obj);
+            _userContext.Entry(obj.Name).Property(p => p.FirstName).IsModified = true;
+            _userContext.Entry(obj.Name).Property(p => p.LastName).IsModified = true;
+            _userContext.Entry(obj.Email).Property(p => p.Address).IsModified = true;
+            await _userContext.SaveChangesAsync();
+
+            return obj;
+        }
+
         public async Task<Entity.User> UpdatePasswordAsync(Entity.User obj)
         {
             _userContext.Attach(obj);
-            _userContext.Entry(obj).Property(p => p.Password.PasswordHash).IsModified = true;
+            _userContext.Entry(obj.Password).Property(p => p.PasswordHash).IsModified = true;
+            await _userContext.SaveChangesAsync();
+
+            return obj;
+        }
+
+        public async Task<Entity.User> UpdateRoleAsync(Entity.User obj)
+        {
+            _userContext.Attach(obj);
+            _userContext.Entry(obj.Role).Property(p => p.UserRole).IsModified = true;
             await _userContext.SaveChangesAsync();
 
             return obj;

@@ -14,7 +14,7 @@
 </p>
 
 <h4 align="center"> 
-	  Projeto Finalizado! Mas aberto para possíveis Updates/Upgrades 
+	  Projeto em fase de finalização 
 </h4>
 
 <h3 id="objetivo">✅ Objetivo:</h3>

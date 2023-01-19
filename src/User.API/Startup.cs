@@ -100,7 +100,7 @@ namespace User.API
                     Type = SecuritySchemeType.ApiKey
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement 
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -130,8 +130,8 @@ namespace User.API
             #region DependenceInjection
 
             services.AddSingleton(autoMapperConfig.CreateMapper());
-            services.AddScoped<IBaseRepository<Domain.Entities.User>, BaseRepository<Domain.Entities.User>>();
-            services.AddScoped<IBaseService<UserDTO, Domain.Entities.User>, BaseService<UserDTO, Domain.Entities.User>>();
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IBaseService<,>), typeof(BaseService<,>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();

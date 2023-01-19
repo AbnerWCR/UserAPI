@@ -124,7 +124,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = UserRoles.ALL_ROLES)]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             try
@@ -141,7 +141,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = UserRoles.PUBLIC)]
+        [Authorize(Roles = UserRoles.ALL_ROLES)]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -164,6 +164,9 @@ namespace User.API.Controllers
             try
             {
                 var result = await _userService.GetByEmail(email);
+
+                if (result == null)
+                    return ResultNotFound(Messages.UserNotFound);
 
                 return ResultOk(string.Empty, result);
             }

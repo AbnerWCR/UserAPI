@@ -14,7 +14,7 @@
 </p>
 
 <h4 align="center"> 
-	  Projeto em fase de finalização 
+	  Projeto finalizado, mas aberto a modificações e upgrades
 </h4>
 
 <h3 id="objetivo">✅ Objetivo:</h3>
@@ -39,6 +39,9 @@ Para que a aplicação inicie é necessário seguir os passos:
 <p>Configurar a string de conexão: dotnet user-secrets set "ConnectionStrings:default" "[STRING CONNECTION]"</p>
 <p>Configurar dados de autenticação (JWT): </p>
 <p>dotnet user-secrets set "Jwt:Key" "[JWT CRYPTOGRAPHY KEY]"</p>
+<p>Será necessário criar uma nova migração com EF Core no projeto Infra.Data</p>
+<p>Remover a proteção de criação de usuário com Authorize e habilitar o Allowanonymous (Obs.: não foi possível criar um usuário de teste padrão pelo nível da criptografia)</p>
+<p>Após isso, remova o Allowanonymous e adicione novamente o Authorize para a Role ADMIN</p>
 <br/>
 <br/>
 <h3 id="pacotes">✅ Pacotes:</h3>

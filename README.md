@@ -17,6 +17,8 @@
 	  Projeto finalizado, mas aberto a modificações e upgrades
 </h4>
 
+<img height="100%" src="https://github.com/AbnerWCR/UserAPI/blob/master/src/User.API/Images/tumb-swagger.png"/>
+
 <h3 id="objetivo">✅ Objetivo:</h3>
 <p>A API foi criada para aplicação de conceitos de clean code, DDD e arquitetura em camadas. Foi realizado o desenvolvimento de apenas uma entidade, visando o foco nas boas práticas e técnologias envolvidas, podendo ser replicado em sistemas maiores posteriormente.</p>
 <br/>

@@ -26,7 +26,16 @@ namespace User.Domain.Entities
             Password = password;
             Role = role;
             _errors = new List<string>();
-
+            //Chama o validate apenas quando instanciado. 
+            Validate();
+        }
+        
+        /*TODO: Criar um método deste para cada propriedade da entidade.
+                Toda alteração de propriedades fica concentrada na propria entidade.
+                Com isso vai forçar que toda alteração parcial que possa ser feita em um objeto já instanciado seja validado antes de persistido. */
+        public void AlterName(string name)
+        {
+            Name = name;
             Validate();
         }
 
